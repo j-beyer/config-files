@@ -1,1 +1,8 @@
-/home/jonas/.Xresources
+URxvt*scrollBar: false
+URxvt*background: grey15
+URxvt*foreground: white
+URxvt*font: xft:Fira Code:size=12
+
+Xft.dpi: 192
+
+Xcursor.size: 32
