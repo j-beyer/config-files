@@ -14,6 +14,23 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  boot.loader.grub = {
+    font = "${pkgs.inconsolata}/share/fonts/opentype/inconsolata.otf";
+    fontSize = 40;
+    extraEntries = ''
+	menuentry "Fedora" {
+	  set root=(hd0,gpt1)
+	  chainloader /efi/fedora/grubx64.efi
+	}
+
+	menuentry "Antergos" {
+	  set root=(hd0,gpt8)
+	  chainloader /efi/antergos/grubx64.efi
+	}
+    '';
+    extraEntriesBeforeNixOS = true;
+    gfxmodeEfi = "1024x768";
+  };
 
   networking = {
 
@@ -53,6 +70,29 @@
     google-chrome
     nodejs
     yarn
+    pcmanfm
+    tree
+    scrot
+    redshift
+    firefox-bin
+    firefox-devedition-bin
+    termite
+    
+    gradle
+
+
+    spotify
+    # clang
+    npm2nix
+    # System
+    xorg.xmodmap # keysyms
+    xorg.xbacklight # backlight control
+    playerctl # media control
+
+    # theme
+    numix-gtk-theme
+    numix-icon-theme
+    numix-icon-theme-square
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -85,6 +125,10 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  hardware.pulseaudio = {
+    enable = true;
+  };
+
   # Enable mysql
   services.mysql = {
     enable = true;
@@ -113,13 +157,14 @@
   services.xserver = {
     enable = true;
 
-    displayManager.lightdm = {
-      enable = true;
-      greeters.gtk = {
+    displayManager.slim = {
 	enable = true;
-      };
+	# theme = ?;
+	# hidpi support
+	extraConfig = ''
+		xserver_arguments -nolisten tcp vt07 -dpi 192
+		'';
     };
-
     desktopManager.xterm.enable = false;
     desktopManager.default = "none";
     windowManager = {
@@ -140,6 +185,10 @@
     inactiveOpacity = "0.7";
     shadow = true;
     fadeDelta = 4;
+
+    extraOptions = ''
+	blur-kern = "11x11gaussian";
+    '';
   };
 
   services.xserver.xkbOptions = "eurosign:e";
@@ -166,6 +215,9 @@
   };
 
   security.sudo.enable = true;
+  security.sudo.configFile = ''
+  		jonas ALL = NOPASSWD: /run/current-system/sw/bin/shutdown, /run/current-system/sw/bin/nixos-rebuild, /run/current-system/sw/bin/mount, /run/current-system/sw/bin/nvim
+	'';
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

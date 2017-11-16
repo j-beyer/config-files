@@ -6,3 +6,5 @@ URxvt*font: xft:Fira Code:size=12
 Xft.dpi: 192
 
 Xcursor.size: 32
+
+rofi.font: Fira Code 24
