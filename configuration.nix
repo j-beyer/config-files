@@ -32,9 +32,10 @@
     gfxmodeEfi = "1024x768";
   };
 
-  networking = {
+  networking = rec {
 
     hostName = "nixps"; # Define your hostname.
+    extraHosts = "127.0.0.1 ${hostName}";
     networkmanager.enable = true;
     wireless.enable = false;
   };
@@ -66,7 +67,7 @@
     jetbrains.idea-ultimate
     neofetch
     slack
-    openjdk
+    # jdk
     google-chrome
     nodejs
     yarn
@@ -94,6 +95,7 @@
     numix-icon-theme
     numix-icon-theme-square
   ];
+
 
   nixpkgs.config.allowUnfree = true;
 
@@ -143,6 +145,8 @@
 			default_storage_engine=innodb
     '';
   };
+
+  programs.java.enable = true;
 
   # Enable tomcat
   services.tomcat = {
